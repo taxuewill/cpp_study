@@ -16,3 +16,4 @@ include_directories(
     include)
 
 add_executable(test1 src/test/test1.cpp)
+add_executable(test2 src/test/test2.cpp)
