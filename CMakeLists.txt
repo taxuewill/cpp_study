@@ -4,6 +4,15 @@ cmake_minimum_required(VERSION 2.8)
 # define the project name
 set(project_name "cpp_studey")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+add_compile_options(-std=c++11)
+
+configure_file(config.h.in config.h)
+
+## add debug message
+add_definitions("-Wall -g")
+
+include_directories(
+    ${CMAKE_CURRENT_BINARY_DIR}
+    include)
 
 add_executable(test1 src/test/test1.cpp)
