@@ -24,6 +24,8 @@ add_executable(sigtest2 src/test/sigtest2.cpp)
 add_executable(signal3 src/test/signal3.cpp)
 add_executable(signal4 src/test/signal4.cpp)
 add_executable(sigset src/test/sigset.cpp)
+add_executable(test4 src/test/test4.cpp)
+add_executable(test5 src/test/test5.cpp)
 
 ####### algo programe ##### 
 add_executable(algo4 src/algo/algo4.cpp)
