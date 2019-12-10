@@ -33,4 +33,4 @@ add_executable(at_test1 src/atomic_test/at_test1.cpp)
 
 ####### algo programe ##### 
 add_executable(algo4 src/algo/algo4.cpp)
-add_executable(slam1 src/slam_test/slam_t1.cpp)
+add_subdirectory(src/slam_test)

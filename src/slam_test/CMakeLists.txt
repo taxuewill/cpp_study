@@ -1,0 +1,1 @@
+add_executable(slam1 slam_t1.cpp)
