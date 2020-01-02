@@ -28,6 +28,7 @@ add_executable(sigset src/test/sigset.cpp)
 add_executable(test4 src/test/test4.cpp)
 add_executable(test5 src/test/test5.cpp)
 add_executable(test6 src/test/test6.cpp)
+add_executable(test7 src/test/test7.cpp)
 
 add_executable(at_test1 src/atomic_test/at_test1.cpp)
 
