@@ -28,9 +28,10 @@ add_executable(sigset src/test/sigset.cpp)
 add_executable(test4 src/test/test4.cpp)
 add_executable(test5 src/test/test5.cpp)
 add_executable(test6 src/test/test6.cpp)
-add_executable(test7 src/test/test7.cpp)
+add_executable(test8 src/test/test8.cpp)
 
-add_executable(at_test1 src/atomic_test/at_test1.cpp)
+add_executable(fdtest1 src/linux/fdtest.cpp)
+add_executable(epolltest src/linux/epoll.cpp)
 
 ####### algo programe ##### 
 add_executable(algo4 src/algo/algo4.cpp)
