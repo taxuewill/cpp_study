@@ -28,7 +28,7 @@ add_executable(sigset src/test/sigset.cpp)
 add_executable(test4 src/test/test4.cpp)
 add_executable(test5 src/test/test5.cpp)
 add_executable(test6 src/test/test6.cpp)
-add_executable(test8 src/test/test8.cpp)
+add_executable(test9 src/test/test9.cpp)
 
 add_executable(fdtest1 src/linux/fdtest.cpp)
 add_executable(epolltest src/linux/epoll.cpp)
