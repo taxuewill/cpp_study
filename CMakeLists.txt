@@ -11,11 +11,19 @@ configure_file(config.h.in config.h)
 ## add debug message
 add_definitions("-Wall -g")
 
+
 LINK_LIBRARIES(pthread)
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     include)
 include_directories("/usr/include/eigen3")
+
+
+find_package( Pangolin )
+include_directories( ${Pangolin_INCLUDE_DIRS} )
+
+find_package(Sophus REQUIRED)
+include_directories(${Sophus_INCLUDE_DIRS})
 
 add_executable(test1 src/test/test1.cpp)
 add_executable(test2 src/test/test2.cpp)
@@ -34,5 +42,7 @@ add_executable(fdtest1 src/linux/fdtest.cpp)
 add_executable(epolltest src/linux/epoll.cpp)
 
 ####### algo programe ##### 
-add_executable(algo4 src/algo/algo4.cpp)
-add_subdirectory(src/slam_test)
+add_executable(algo5 src/algo/algo5.cpp)
+target_link_libraries(algo5 ${Pangolin_LIBRARIES} )
+add_executable(algo3 src/algo/slam_t3.cpp)
+#add_subdirectory(src/slam_test)
