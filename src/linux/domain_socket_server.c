@@ -17,9 +17,7 @@ int main(void){
 
     int socket_srv = -1;
     int socket_client = -1;
-    // int t = -1;
-    int len = 0;
-    struct sockaddr_un addr_srv, addr_client;
+    struct sockaddr_un addr_srv;
     char str[1024] = {0};
     // memset(str,0,sizeof(char)*100);
     
