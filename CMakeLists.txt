@@ -46,3 +46,7 @@ add_executable(algo5 src/algo/algo5.cpp)
 target_link_libraries(algo5 ${Pangolin_LIBRARIES} )
 add_executable(algo3 src/algo/slam_t3.cpp)
 #add_subdirectory(src/slam_test)
+
+###### linux #####
+add_executable(domain_server src/linux/domain_socket_server.c)
+add_executable(domain_client src/linux/domain_socket_client.c)
