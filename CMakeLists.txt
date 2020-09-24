@@ -36,17 +36,21 @@ add_executable(sigset src/test/sigset.cpp)
 add_executable(test4 src/test/test4.cpp)
 add_executable(test5 src/test/test5.cpp)
 add_executable(test6 src/test/test6.cpp)
-add_executable(test9 src/test/test9.cpp)
+add_executable(test7 src/test/test7.cpp)
+add_executable(test8 src/test/test8.cpp)
+add_executable(basic src/test/basic.cpp)
 
 add_executable(fdtest1 src/linux/fdtest.cpp)
 add_executable(epolltest src/linux/epoll.cpp)
 
 ####### algo programe ##### 
-add_executable(algo5 src/algo/algo5.cpp)
-target_link_libraries(algo5 ${Pangolin_LIBRARIES} )
-add_executable(algo3 src/algo/slam_t3.cpp)
+# add_executable(algo5 src/algo/algo5.cpp)
+# target_link_libraries(algo5 ${Pangolin_LIBRARIES} )
+# add_executable(algo3 src/algo/slam_t3.cpp)
 #add_subdirectory(src/slam_test)
 
 ###### linux #####
 add_executable(domain_server src/linux/domain_socket_server.c)
 add_executable(domain_client src/linux/domain_socket_client.c)
+
+add_executable(proxy_demo src/design_pattern/proxy/proxy_demo.cpp)
