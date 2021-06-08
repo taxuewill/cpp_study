@@ -1,4 +1,6 @@
 build/
 src/useful/a.out
 src/useful/com/
-vscode/
+.vscode/
+.idea
+cmake-build-debug/
