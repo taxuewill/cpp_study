@@ -1,27 +1,39 @@
-#include <vector>
 #include <iostream>
 #include <thread>
-#include <atomic>
+#include <mutex>
+#include <bitset>
 #include <string>
 
-std::atomic<int> cnt = {0};
-using namespace std;
-void f()
-{
-  for (int n = 0; n < 1000; ++n)
-  {
-    cnt.fetch_add(1, std::memory_order_relaxed);
-  }
+using std::bitset;
+
+std::once_flag flag1,flag2;
+
+void simple_do_once(){
+    std::call_once(flag1,[](){
+        std::cout<<"Simple example: called once\n";
+    });
+}
+
+void may_throw_function(bool do_throw){
+    if(do_throw){
+        std::cout<<"throw: call_once will retry\n";
+        throw std::exception();
+    }
+    std::cout<<"Didn't throw, call once will not attempt again\n";
+}
+
+void do_once(bool do_throw){
+    try{
+        std::call_once(flag2,may_throw_function,do_throw);
+    }catch (...){
+        std::cout<<"got exception\n";
+    }
 }
 
 int main()
 {
-  //  const char* s1 = "hello";
-  string s1("hello");
-  string s2("hello");
-  if (s1 == s2)
-  {
-    cout << "equals" << endl;
-  }
-  cout << s1 << endl;
+    std::string str("1100");
+    bitset<4> bs(str);
+    std::cout<<"bs[0] "<<bs[0]<<std::endl;
+
 }
