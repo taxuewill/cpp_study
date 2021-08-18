@@ -2,37 +2,45 @@
 // Created by will on 2021/8/18.
 //
 
-#include "utils/cpp_timer.h"
+#include "utils/timer_task.h"
 #include <iostream>
 #include <memory>
 #include <functional>
+#include <condition_variable>
+#include <thread>
+#include <chrono>
 
 using namespace std;
-using namespace robot_util;
+using namespace std::chrono;
 
-class MyObject{
-public:
-    MyObject(){
-        cout<<"create MyObject"<<endl;
+mutex cv_m;
+condition_variable cv;
+
+void worker_thread(){
+    std::unique_lock<mutex> lk(cv_m);
+    if(cv.wait_for(lk,chrono::seconds(2))==std::cv_status::timeout){
+        cout<<"timeout do something"<<endl;
+    }else{
+        cout<<"canceled"<<endl;
     }
-    void test(int i){
-        cout<<"this is test "<<i<<endl;
+}
+
+class MyDelayTask : public TimerTask{
+public:
+    void run(){
+        cout<<"this is MyDelayTask"<<endl;
     }
 };
 
 int main(int argc,char ** argv){
-    using namespace std::placeholders;
-    cout<<"this is demo"<<endl;
-    std::shared_ptr<CTimer> ptimer = std::make_shared<CTimer>("ctimer1");
-    MyObject object;
-//    ptimer->AsyncOnce(1000,[&](){
-//       cout<<"delay 1000ms "<<endl;
-//       object.test(10);
-//    });
-    ptimer->AsyncOnce(1000,std::bind(&MyObject::test,object,2));
-    int i =0 ;
-    cin >> i;
-
+    std::shared_ptr<TimerTask> pTask = std::make_shared<MyDelayTask>();
+    std::shared_ptr<CppTimer> pTimer = std::make_shared<CppTimer>();
+    pTimer->startWithDelay(pTask,3);
+    int i;
+    cin >>i;
+    if(i==1){
+        pTimer->cancel();
+    }
     return 0;
 }
 
