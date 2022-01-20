@@ -4,12 +4,24 @@ cmake_minimum_required(VERSION 3.0)
 # define the project name
 project("cpp_studey")
 
-add_compile_options(-std=c++11)
+add_compile_options(-std=c++14)
 
 configure_file(config.h.in config.h)
 
 ## add debug message
 add_definitions("-Wall -g")
+
+find_package (SQLite3 REQUIRED)
+
+find_package(Boost REQUIRED COMPONENTS
+        system
+        filesystem )
+
+include_directories(${SQLite3_INCLUDE_DIRS})
+
+if(Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+endif()
 
 
 LINK_LIBRARIES(pthread)
@@ -18,6 +30,9 @@ include_directories(
     include)
 
 
-add_executable(mytest
-        src/demo.cpp
-        src/utils/timer_task.cpp)
+
+#target_link_libraries(exit_test
+#        ${SQLite3_LIBRARIES})
+
+## Test Target
+add_executable(generic_test test/generic/test.cpp)

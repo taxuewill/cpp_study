@@ -2,45 +2,69 @@
 // Created by will on 2021/8/18.
 //
 
-#include "utils/timer_task.h"
 #include <iostream>
-#include <memory>
-#include <functional>
-#include <condition_variable>
+#include <future>
+#include <tuple>
 #include <thread>
-#include <chrono>
+
 
 using namespace std;
-using namespace std::chrono;
 
-mutex cv_m;
-condition_variable cv;
+const string kOne("one");
 
-void worker_thread(){
-    std::unique_lock<mutex> lk(cv_m);
-    if(cv.wait_for(lk,chrono::seconds(2))==std::cv_status::timeout){
-        cout<<"timeout do something"<<endl;
-    }else{
-        cout<<"canceled"<<endl;
-    }
+template<typename T>
+inline T max(const T & l,const T& r){
+    return l>r?l:r;
 }
 
-class MyDelayTask : public TimerTask{
-public:
-    void run(){
-        cout<<"this is MyDelayTask"<<endl;
-    }
+template<class T>
+T get(){
+    return{};
+}
+
+struct User{
+    string name;
+    int age;
 };
 
-int main(int argc,char ** argv){
-    std::shared_ptr<TimerTask> pTask = std::make_shared<MyDelayTask>();
-    std::shared_ptr<CppTimer> pTimer = std::make_shared<CppTimer>();
-    pTimer->startWithDelay(pTask,3);
-    int i;
-    cin >>i;
-    if(i==1){
-        pTimer->cancel();
-    }
+int asyncWork(){
+    return 10;
+}
+
+std::string time() {
+    static auto start = std::chrono::steady_clock::now();
+    std::chrono::duration<double> d = std::chrono::steady_clock::now() - start;
+    return "[" + std::to_string(d.count()) + "s]";
+}
+
+void OutOfMem(int value){
+    std::cerr<<"Unable to satisfy request for memory\n";
+    std::abort();
+}
+
+struct Foo {
+    int value;
+    void f() { std::cout << "f(" << this->value << ")\n"; }
+    void g() { std::cout << "g(" << this->value << ")\n"; }
+};
+
+void apply(Foo* foo1,Foo* foo2,void (Foo::*func)()){
+    (foo1->*func)();
+    (foo2->*func)();
+}
+
+int main(int argc, char **argv) {
+    const int a = 1;
+    const int b = 2;
+    const int * p = &a;
+    p = & b;
+    cout<< * p<<endl;
+
+    int c = 5;
+    int d = 10;
+    int * const f = &c;
+    static int s_a;
+    cout<<s_a<<endl;
     return 0;
 }
 
