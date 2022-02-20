@@ -17,6 +17,9 @@ find_package(Boost REQUIRED COMPONENTS
         system
         filesystem )
 
+find_library(MQTT_C paho-mqtt3c REQUIRED)
+find_library(MQTT_CPP paho-mqttpp3 REQUIRED)
+
 include_directories(${SQLite3_INCLUDE_DIRS})
 
 if(Boost_FOUND)
@@ -36,3 +39,6 @@ include_directories(
 
 ## Test Target
 add_executable(generic_test test/generic/test.cpp)
+add_executable(mqtt_test src/mqtt/mqtt_main.cpp)
+
+target_link_libraries(mqtt_test ${MQTT_C} ${MQTT_CPP})
