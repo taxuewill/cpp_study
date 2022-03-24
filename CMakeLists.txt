@@ -40,5 +40,8 @@ include_directories(
 ## Test Target
 add_executable(generic_test test/generic/test.cpp)
 add_executable(mqtt_test src/mqtt/mqtt_main.cpp)
+add_executable(serial_test
+        src/serial/main.cpp
+        src/serial/userCrc16.c)
 
 target_link_libraries(mqtt_test ${MQTT_C} ${MQTT_CPP})

@@ -6,10 +6,11 @@
 #include <chrono>
 #include <cstring>
 #include "mqtt/async_client.h"
+#include <unistd.h>
 
 using namespace std;
 
-const std::string DFLT_SERVER_ADDRESS	{ "tcp://localhost:1883" };
+const std::string DFLT_SERVER_ADDRESS	{ "tcp://192.168.28.162:1883" };
 const std::string DFLT_CLIENT_ID		{ "async_publish" };
 
 const string TOPIC { "test" };
@@ -54,12 +55,12 @@ class action_listener : public virtual mqtt::iaction_listener
 {
 protected:
 	void on_failure(const mqtt::token& tok) override {
-		cout << "\tListener failure for token: "
+		cout << "Listener failure for token: "
 			<< tok.get_message_id() << endl;
 	}
 
 	void on_success(const mqtt::token& tok) override {
-		cout << "\tListener success for token: "
+		cout << "Listener success for token: "
 			<< tok.get_message_id() << endl;
 	}
 };
@@ -75,11 +76,13 @@ class delivery_action_listener : public action_listener
 
 	void on_failure(const mqtt::token& tok) override {
 		action_listener::on_failure(tok);
+		cout<<"on_failure"<<endl;
 		done_ = true;
 	}
 
 	void on_success(const mqtt::token& tok) override {
 		action_listener::on_success(tok);
+		cout<<"on_success " << tok.get_message_id()<<endl;
 		done_ = true;
 	}
 
@@ -102,9 +105,12 @@ int main(int argc, char* argv[])
 	client.set_callback(cb);
 
 	mqtt::connect_options conopts;
-	mqtt::message willmsg(TOPIC, LWT_PAYLOAD, 1, true);
-	mqtt::will_options will(willmsg);
-	conopts.set_will(will);
+//	mqtt::message willmsg(TOPIC, LWT_PAYLOAD, 1, true);
+//	mqtt::will_options will(willmsg);
+//	conopts.set_will(will);
+
+    conopts.set_connect_timeout(10);
+    conopts.set_keep_alive_interval(300);
 
 	cout << "  ...OK" << endl;
 
@@ -114,45 +120,46 @@ int main(int argc, char* argv[])
 		cout << "Waiting for the connection..." << endl;
 		conntok->wait();
 		cout << "  ...OK" << endl;
+		sleep(10);
 
 		// First use a message pointer.
 
-		cout << "\nSending message..." << endl;
-		mqtt::message_ptr pubmsg = mqtt::make_message(TOPIC, PAYLOAD1);
-		pubmsg->set_qos(QOS);
-		client.publish(pubmsg)->wait_for(TIMEOUT);
-		cout << "  ...OK" << endl;
+//		cout << "Sending message..." << endl;
+//		mqtt::message_ptr pubmsg = mqtt::make_message(TOPIC, PAYLOAD1);
+//		pubmsg->set_qos(QOS);
+//		client.publish(pubmsg);
+//		cout << "  ...OK" << endl;
 
 		// Now try with itemized publish.
 
-		cout << "\nSending next message..." << endl;
-		mqtt::delivery_token_ptr pubtok;
-		pubtok = client.publish(TOPIC, PAYLOAD2, strlen(PAYLOAD2), QOS, false);
-		cout << "  ...with token: " << pubtok->get_message_id() << endl;
-		cout << "  ...for message with " << pubtok->get_message()->get_payload().size()
-			<< " bytes" << endl;
-		pubtok->wait_for(TIMEOUT);
-		cout << "  ...OK" << endl;
+//		cout << "Sending next message..." << endl;
+//		mqtt::delivery_token_ptr pubtok;
+//		pubtok = client.publish(TOPIC, PAYLOAD2, strlen(PAYLOAD2), QOS, false);
+//		cout << "  ...with token: " << pubtok->get_message_id() << endl;
+//		cout << "  ...for message with " << pubtok->get_message()->get_payload().size()
+//			<< " bytes" << endl;
+//		pubtok->wait_for(TIMEOUT);
+//		cout << "  ...OK" << endl;
 
 		// Now try with a listener
 
 		cout << "\nSending next message..." << endl;
 		action_listener listener;
-		pubmsg = mqtt::make_message(TOPIC, PAYLOAD3);
-		pubtok = client.publish(pubmsg, nullptr, listener);
-		pubtok->wait();
-		cout << "  ...OK" << endl;
+		auto pubmsg = mqtt::make_message(TOPIC, PAYLOAD3);
+		client.publish(pubmsg, nullptr, listener);
+
 
 		// Finally try with a listener, but no token
-
-		cout << "\nSending final message..." << endl;
-		delivery_action_listener deliveryListener;
-		pubmsg = mqtt::make_message(TOPIC, PAYLOAD4);
-		client.publish(pubmsg, nullptr, deliveryListener);
-
-		while (!deliveryListener.is_done()) {
-			this_thread::sleep_for(std::chrono::milliseconds(100));
-		}
+//
+//		cout << "\nSending final message..." << endl;
+//		delivery_action_listener deliveryListener;
+//		pubmsg = mqtt::make_message(TOPIC, PAYLOAD4);
+//		pubmsg->set_qos(1);
+//		client.publish(pubmsg, nullptr, deliveryListener);
+//
+//		while (!deliveryListener.is_done()) {
+//			this_thread::sleep_for(std::chrono::milliseconds(100));
+//		}
 		cout << "OK" << endl;
 
 		// Double check that there are no pending tokens
@@ -161,6 +168,8 @@ int main(int argc, char* argv[])
 		if (!toks.empty())
 			cout << "Error: There are pending delivery tokens!" << endl;
 
+
+		char a = getchar();
 		// Disconnect
 		cout << "\nDisconnecting..." << endl;
 		conntok = client.disconnect();
