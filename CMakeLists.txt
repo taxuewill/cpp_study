@@ -84,3 +84,12 @@ target_link_libraries(zserver PUBLIC
         ${ZeroMQ_LIBRARY}
         ${PROTOBUF_LIBRARIES})
 
+
+add_executable(serial_sender
+        src/serial/serial_sender.cpp
+        src/serial/userCrc16.c)
+
+add_executable(serial_receiver
+        src/serial/serial_receiver.cpp
+        src/serial/userCrc16.c)
+
