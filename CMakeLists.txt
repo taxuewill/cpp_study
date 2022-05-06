@@ -93,3 +93,5 @@ add_executable(serial_receiver
         src/serial/serial_receiver.cpp
         src/serial/userCrc16.c)
 
+add_executable(template_test src/template/test.cpp)
+
