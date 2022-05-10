@@ -95,3 +95,7 @@ add_executable(serial_receiver
 
 add_executable(template_test src/template/test.cpp)
 
+add_executable(boost_test src/boost/test.cpp)
+
+target_link_libraries(boost_test ${Boost_LIBRARIES})
+
